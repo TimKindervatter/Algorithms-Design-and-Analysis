@@ -33,7 +33,7 @@ if __name__ == '__main__':
     low = -10000
     high = -9000
     n = high - low
-    procs = 16
+    procs = 12
 
     sizeSegment = n/procs
 
