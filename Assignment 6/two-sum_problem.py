@@ -1,5 +1,5 @@
 import math
-from multiprocessing import Pool
+import multiprocessing as mp
 from timeit import default_timer as timer
 
 def two_sum(args):
@@ -31,9 +31,9 @@ if __name__ == '__main__':
     number_list = [int(line) for line in file]
     
     low = -10000
-    high = -9000
+    high = 10001
     n = high - low
-    procs = 12
+    procs = mp.cpu_count()
 
     sizeSegment = n/procs
 
@@ -44,8 +44,9 @@ if __name__ == '__main__':
                            math.ceil((i+1)*sizeSegment-10000)), number_list))
 
     start = timer()
-    pool = Pool(procs).map(two_sum, jobs)
-    result = sum(pool)
+    with mp.Pool(procs).map(two_sum, jobs) as pool:
+        result = sum(pool)
     duration = timer() - start
     
     print('The number of distinct test values with a two-sum in the provided file is {}'.format(result))
+    print('This computation was performed using {0} processes and took {1:0.2f} seconds to complete'.format(procs, duration))
