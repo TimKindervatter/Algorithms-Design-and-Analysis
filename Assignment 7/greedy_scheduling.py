@@ -1,22 +1,26 @@
 def greedy_difference(jobs):
-    return sorted(jobs, key=difference, reverse=True)
-
-
-def difference(job):
-    """ Returns the job's weight minus its length."""
-    return job[0] - job[1] 
+    schedule = sorted(jobs, key=lambda x: (x[0] - x[1], x[0]), reverse=True)
+    return schedule
 
 
 def greedy_ratio(jobs):
-    return sorted(jobs, key=ratio, reverse=True)
+    return sorted(jobs, key=lambda x: x[0]/x[1], reverse=True)
+    
 
 
-def ratio(job):
-    """Returns the job's weight divided by its length"""
-    return job[0]/job[1]
+def sum_weighted_completion_times(jobs):
+    sum = 0
+    completion_time = 0
+    for job in jobs:
+        completion_time += job[1]
+        sum += job[0]*completion_time
+
+    return sum
 
 if __name__ == '__main__':
     data = []
     with open('jobs.txt') as f:
         for line in f.readlines():
             data.append([int(x) for x in line.strip().split()])
+
+    
