@@ -1,68 +1,71 @@
-def count_split_inversions(A):
+def count_split_inversions(array):
     """
-    Counts the number of split inversions in an array A. 
-    An inversion is a pair (i, j) such that i < j and A[i] > A[j].
-    A split inversion is one in which i <= n/2 < j
+    Counts the number of split inversions in an array array. 
+    An inversion is a pair (i, j) such that i < j and array[i] > array[j].
+    array split inversion is one in which i <= n/2 < j
     
     Args:
-        A: The array to be analyzed for split inversions.
+        array: The array to be analyzed for split inversions.
         
     Returns:
-        A sorted version of A (this algorithm for counting split inversions piggybacks on merge sort).
+        split_inversions: The total number of split inversions in the array
     """
 
-    def count_split_inversions_helper(A, inversion_count):
-        n = len(A)
-        
-        if n == 1:
-            return A, inversion_count
+    def count_split_inversions_helper(array, inversion_count):
+        array_length = len(array)
+
+        if array_length == 1:
+            return array, inversion_count
         else:
-            B, inversion_count = count_split_inversions_helper(A[0:n//2], inversion_count)
-            C, inversion_count = count_split_inversions_helper(A[n//2:], inversion_count)
+            left_subarray, inversion_count = count_split_inversions_helper(left_side(array), inversion_count)
+            right_subarray, inversion_count = count_split_inversions_helper(right_side(array), inversion_count)
             
-            D = []
+            sorted_array = []
             i = 0
             j = 0
 
-            for k in range(n):
-                if i < len(B) and j < len(C):
-                    #If the currently-pointed-to element in the left half is 
-                    #smaller than that in the right half, insert it into D
-                    if B[i] < C[j]:
-                        D.append(B[i])
+            for _ in range(array_length):
+                if i < len(left_subarray) and j < len(right_subarray):
+                    #If the currently-pointed-to element in the left half is smaller than that in the right half, insert it into the sorted array
+                    if left_subarray[i] < right_subarray[j]:
+                        sorted_array.append(left_subarray[i])
                         i = i + 1
                     else:
-                        #Otherwise, put the currently-pointed-to element in the right half in D
-                        D.append(C[j])
+                        #Otherwise, put the currently-pointed-to element in the right half into the sorted array
+                        sorted_array.append(right_subarray[j])
                         j = j + 1
-                        #There are still elements in the left half, and they must be greater than the current
-                        #element in the right half; i.e. they are inversions.
-                        inversion_count += (len(B) - i)
-                elif j >= len(C):
-                    #If the right half has been fully traversed, simply append the remaining elements from the left half
-                    D.append(B[i])
+                        #There are still elements in the left half, and they must be greater than the current element in the right half; i.e. they are inversions.
+                        inversion_count += (len(left_subarray) - i)
+                elif j >= len(right_subarray):
+                    #If the right half has been fully traversed, append the remaining elements from the left half
+                    sorted_array.append(left_subarray[i])
                     i = i + 1
-                elif i >= len(B):
-                    #If the left half has been fully traversed, simply append the remaining elements in the right half
-                    D.append(C[j])
+                elif i >= len(left_subarray):
+                    #If the left half has been fully traversed, append the remaining elements in the right half
+                    sorted_array.append(right_subarray[j])
                     j = j + 1
                     
-        #Return the merge-sorted sublist D for further recursive merges
-        #Also return the running total of split inversions for any future recursive calls to take into account
-        return D, inversion_count
+        return sorted_array, inversion_count
 
     split_inversions = 0
-    A, split_inversions = count_split_inversions_helper(A, split_inversions)
+    array, split_inversions = count_split_inversions_helper(array, split_inversions)
 
     return split_inversions
+
+
+def left_side(array):
+    return array[0:len(array)//2]
+
+
+def right_side(array):
+    return array[len(array)//2:]
 
 if __name__ == '__main__':
     #Read in the text file of integers and store it in a list
     text_file = open('IntegerArray.txt')
-    A = []
+    array = []
     for line in text_file:
-        A.append(int(line))
+        array.append(int(line))
 
-    split_inversions = 0 #Initialize split_inversions
-    total_inversions = count_split_inversions(A)
+    total_inversions = count_split_inversions(array)
     print(total_inversions)
