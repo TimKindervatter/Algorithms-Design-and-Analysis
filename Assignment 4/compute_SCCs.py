@@ -36,7 +36,7 @@ def kosaraju(adj_list):
 
 def DFS_Loop(G):
     """
-    Loops through nodes in descending order, calling DFS on any that have not been explored yet.\
+    Loops through nodes in descending order, calling DFS on any that have not been explored yet.
     
     Args:
         G: The directed graph to be searched.
@@ -47,17 +47,14 @@ def DFS_Loop(G):
     finishing_time = 0
     DFS_call_node = None
     
-    #Loop through each node in descending order
     for node in range(G.n, 0, -1):
-        #If the node hasn't been explored yet, call DFS on it
         if not G.explored[node]:
-            #Keep track of which node DFS was called from, so that the leader 
-            #dictionary can use this information
+            #Keep track of which node DFS was called from, so that the leader dictionary can use this information
             DFS_call_node = node
             DFS(G, node)
            
 
-def DFS(G,source_node):
+def DFS(G, source_node):
     """
     Initiates a depth first search on the graph G starting with the specified source node.
     
@@ -68,12 +65,9 @@ def DFS(G,source_node):
     global finishing_time
     global DFS_call_node
     
-    #List which will be used to keep track of which nodes were explored
-    #and in what order
+    #List which will be used to keep track of which nodes were explored and in what order
     order_explored = []
     
-    #Mark the source node as explored, make a note of its leader, and append it
-    #to the list of explored nodes
     G.mark_explored(source_node)
     G.set_leader(source_node, DFS_call_node)
     order_explored.append(source_node)
@@ -81,33 +75,20 @@ def DFS(G,source_node):
     #A list of all the head nodes pointed to by the source node
     nodes_to_visit = G.edges[source_node]
     
-    #In the lecture, DFS was implemented recursively. However, the recursion depth
-    #required to solve the problem is greater than python's recursion limit. I 
-    #rewrote the code to use a stack instead of recursive calls on DFS.
-    
-    #The nodes_to_visit list is treated as a stack. Every time a node is explored,
-    #it is popped off the stack. Any head nodes pointed to by the just-explored
-    #node are pushed onto the stack, so that they are explored first (i.e. depth first)
+    #The nodes_to_visit list is treated as a stack. Every time a node is explored, it is popped off the stack. 
+    #Any head nodes pointed to by the just-explored node are pushed onto the stack, so that they are explored first (i.e. depth first).
     while nodes_to_visit:
-        #Pop the next node to be explored off of the stack
         head_node = nodes_to_visit.pop()
-        #As long as the node popped off the stack hasn't been explored yet...
         if not G.explored[head_node]:
-            #Mark it as explored, make a note of its leader, and append it to
-            #the list of explored nodes
             G.mark_explored(head_node)
             G.set_leader(head_node, DFS_call_node)
             order_explored.append(head_node)
             
-            #Push any nodes pointed to by the just-explored node onto the stack
             nodes_to_visit.extend(G.edges[head_node])
     
-    #Order explored is also treated as a stack. It contains all the nodes explored
-    #by this call of DFS in order of finishing time.
+    #Order explored is also treated as a stack. It contains all the nodes explored by this call of DFS in order of finishing time.
     while order_explored:
-        #Nodes are popped off the stack one-by-one
         node = order_explored.pop()
-        #They are assigned a finishing time according to the running total
         finishing_time = finishing_time + 1
         G.set_finishing_time(node,finishing_time)
 
@@ -120,7 +101,7 @@ if __name__ == '__main__':
     
     SCC_sizes = kosaraju(adj_list)
 
-    sorted_vals = sorted(SCC_sizes, reverse=True)
+    sorted_SCC_sizes = sorted(SCC_sizes, reverse=True)
 
     #The sizes of the five largest SCCs
-    top_five = sorted_vals[0:5]
+    top_five = sorted_SCC_sizes[0:5]
