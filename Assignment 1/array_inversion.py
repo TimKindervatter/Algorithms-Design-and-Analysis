@@ -1,3 +1,5 @@
+from pathlib import Path
+
 def count_inversions(array):
     """
     Counts the number of split inversions in an array array. 
@@ -74,8 +76,10 @@ def merge_subarrays(left_subarray, right_subarray):
 
 
 if __name__ == '__main__':
+    path = Path(__file__ + '../..').resolve()
+
     #Read in the text file of integers and store it in a list
-    with open('IntegerArray.txt') as text_file:
+    with open(Path(path, 'IntegerArray.txt')) as text_file:
         array = []
         for line in text_file:
             array.append(int(line))

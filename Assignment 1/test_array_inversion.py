@@ -1,11 +1,13 @@
 import pytest
+from pathlib import Path
 from array_inversion import *
 
 #Example array from lectures
 t1 = ([1,3,5,2,4,6], 3)
 
 #Answer to Assignment 1
-with open('IntegerArray.txt') as text_file:
+path = Path(__file__ + '../..').resolve()
+with open(Path(path, 'IntegerArray.txt')) as text_file:
     array = []
     for line in text_file:
         array.append(int(line))
