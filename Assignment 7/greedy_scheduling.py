@@ -1,3 +1,5 @@
+from pathlib import Path
+
 def greedy_difference(jobs):
     """ Computes a greedy schedule based on the difference of a job's weight and its length. Ties broken by scheduling higher weighted jobs first."""
     schedule = sorted(jobs, key=lambda job: (weight(job) - length(job), weight(job)), reverse=True)
@@ -30,8 +32,10 @@ def length(job):
     return job[1]
 
 if __name__ == '__main__':
+    path = Path(__file__ + '../..').resolve()
+    
     data = []
-    with open('jobs.txt') as f:
+    with open(Path(path, 'jobs.txt')) as f:
         for line in f.readlines():
             data.append([int(x) for x in line.strip().split()])
 

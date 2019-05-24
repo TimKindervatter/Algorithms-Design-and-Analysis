@@ -1,5 +1,7 @@
 import pytest
+from pathlib import Path
 from greedy_scheduling import *
+
 
 t1 = ([[1,1], [2,1], [3,1]], [[3,1], [2,1], [1,1]]) #Example from lecture, each job has same length
 t2 = ([[1,1], [1,2], [1,3]], [[1,1], [1,2], [1,3]]) #Example from lecture, each job has same weight
@@ -28,8 +30,10 @@ t2 = ([[1,1], [1,2], [1,3]], 10, greedy_ratio)
 t3 = ([[2,1], [3,2], [5,5]], 51, greedy_ratio)
 t4 = ([[2,1], [3,2], [5,5]], 52, greedy_difference)
 
+
+path = Path(__file__ + '../..').resolve()
 data = []
-with open('jobs.txt') as f:
+with open(Path(path, 'jobs.txt')) as f:
     for line in f.readlines():
         data.append([int(x) for x in line.strip().split()])
 
