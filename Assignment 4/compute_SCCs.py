@@ -1,5 +1,5 @@
 import collections
-from Digraph_Class import Digraph
+from graph import Digraph
 
 
 def kosaraju(adj_list):
