@@ -1,6 +1,6 @@
 import collections
 from graph import Digraph
-
+from pathlib import Path
 
 def kosaraju(adj_list):
     #Reverse the graph, first step in Kosaraju's two-pass algorithm
@@ -94,7 +94,8 @@ def DFS(G, source_node):
 
 
 if __name__ == '__main__':
-    file = open('SCC.txt')
+    path = Path(__file__ + '../..').resolve()
+    file = open(Path(path, 'SCC.txt'))
     adj_list = []
     for line in file:
         adj_list.append([int(x) for x in line.split()])

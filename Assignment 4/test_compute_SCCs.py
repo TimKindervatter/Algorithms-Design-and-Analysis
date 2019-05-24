@@ -1,4 +1,5 @@
 import pytest
+from pathlib import Path
 from compute_SCCs import *
 
 #Reversed graph given as an example in the lectures
@@ -20,7 +21,9 @@ def test_kosaraju(adj_list, expected):
     assert(number_of_SCCs == expected)
 
 
-file = open('SCC.txt')
+path = Path(__file__ + '../..').resolve()
+
+file = open(Path(path, 'SCC.txt'))
 adj_list = []
 for line in file:
     adj_list.append([int(x) for x in line.split()])
