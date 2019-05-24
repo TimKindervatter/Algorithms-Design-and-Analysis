@@ -18,3 +18,21 @@ def test_kosaraju(adj_list, expected):
     number_of_SCCs = len(kosaraju(adj_list))
 
     assert(number_of_SCCs == expected)
+
+
+file = open('SCC.txt')
+adj_list = []
+for line in file:
+    adj_list.append([int(x) for x in line.split()])
+
+t2 = (adj_list, [434821, 968, 459, 313, 211])
+
+test_cases = [t2]
+
+@pytest.mark.parametrize('adj_list, expected', test_cases)
+def test_SCC_sizes(adj_list, expected):
+    SCC_sizes = kosaraju(adj_list)
+    sorted_SCC_sizes = sorted(SCC_sizes, reverse=True)
+
+    assert(sorted_SCC_sizes[0:5] == expected)
+    assert(sorted_SCC_sizes)
