@@ -1,80 +1,61 @@
 import collections
+from Digraph_Class import Digraph
 
-class Digraph:
+
+def kosaraju(adj_list):
+    #Reverse the graph, first step in Kosaraju's two-pass algorithm
+    adj_list_rev = []
+    for i in adj_list:
+        adj_list_rev.append(i[::-1])
+
+    G_rev = Digraph(adj_list_rev)
+
+    #Run DFS_Loop on the reversed graph to obtain finishing times (second step of Kosaraju's two-pass algorithm)
+    DFS_Loop(G_rev)
+
+    #Relabel the nodes of the original graph G so that their number reflects their finishing time from the DFS_Loop call on G_rev
+    for i, edge in enumerate(adj_list):
+        for j, node in enumerate(edge):
+            adj_list[i][j] = G_rev.finishing_time[node]
+
+    G = Digraph(adj_list)
+
+    #Run DFS_Loop on the relabeled graph to obtain leaders (third step in Kosaraju's two-step algorithm)
+    DFS_Loop(G)
+        
+    leader = []
+    for value in G.leader.values():
+        leader.append(value)
+        
+    #Counts how many times each leader appears (recall all nodes with the same leader form an SCC)
+    SCCs = collections.Counter(leader)
+    vals = list(SCCs.values())
+
+    return vals
+
+
+def DFS_Loop(G):
     """
-    A class defining a directed graph object.
+    Loops through nodes in descending order, calling DFS on any that have not been explored yet.\
+    
+    Args:
+        G: The directed graph to be searched.
     """
-    def __init__(self, adj_list):
-        """
-        Constructor for the Digraph class.
-        
-        Args:
-            adj_list: The adjacency list representation of the directed graph.
-                Adjacency list must be a list of lists, where each sublist represents one edge. 
-                Each sublist has two elements; the first element is the tail node, and the second element is the head node.
-        """
-        
-        #Obtains a set (i.e. no repeats) of all the nodes in the digraph
-        all_nodes = []
-        for i in adj_list:
-            all_nodes.append(i[0])
-            all_nodes.append(i[1])
-        unique_nodes = set(all_nodes)
-        
-        #Number of nodes in the graph
-        self.n = len(unique_nodes)
-        
-        #Uses adj_list to create a dictionary whose keys are tail nodes and 
-        #whose values are lists of all the head nodes pointing to that tail node
-        self.edges = dict((el+1,[]) for el in range(self.n))
-        for edge in adj_list:
-            tail_node = int(edge[0])
-            head_node = int(edge[1])
-            self.edges[tail_node].append(head_node)
-        
-        #Initializes an empty dictionary whose keys are nodes and whose value
-        #denotes whether it has been explored (True) or not (False)
-        self.explored = dict((el+1, False) for el in range(self.n))
-        
-        #Initializes an empty dictionary whose keys are nodes and whose value
-        #denotes which node DFS was called on to explore this node
-        self.leader = dict((el+1, None) for el in range(self.n))
-        
-        #Initializes an empty dictionary whose keys are nodes and whose value
-        #denotes the finishing time of the node
-        self.finishing_time = dict((el+1, None) for el in range(self.n))
-        
-    def mark_explored(self, explored_node):
-        """
-        Uses the input node as the key and changes the corresponding value of 
-        the explored dictionary to True.
-        
-        Args:
-            explored_node: The number of the node to be marked as explored
-        """
-        self.explored[explored_node] = True
-        
-    def set_finishing_time(self, explored_node, finishing_time):
-        """
-        Uses the input node as the key and changes the corresponding value of 
-        the finishing time dictionary to the running count of finishing time.
-        
-        Args:
-            explored_node: The node whose finishing time is to be specified.
-            finishing_time: The running count of the number of nodes explored so far.
-        """
-        self.finishing_time[explored_node] = finishing_time
-        
-    def set_leader(self, explored_node, DFS_call_node):
-        """
-        Uses the input node as the key and changes the corresponding value of 
-        the leader dictionary to the node that DFS was called on.
-        
-        Args:
-            explored_node: The node that was just explored and whose leader is to be specified.
-            DFS_call_node: The node that the current DFS call originated from.
-        """
-        self.leader[explored_node] = DFS_call_node
+    global finishing_time
+    global DFS_call_node
+    
+    finishing_time = 0
+    DFS_call_node = None
+    
+    #Loop through each node in descending order
+    for node in range(G.n, 0, -1):
+        #If the node hasn't been explored yet, call DFS on it
+        if not G.explored[node]:
+            #Keep track of which node DFS was called from, so that the leader 
+            #dictionary can use this information
+            DFS_call_node = node
+            DFS(G, node)
+           
 
 def DFS(G,source_node):
     """
@@ -129,84 +110,17 @@ def DFS(G,source_node):
         #They are assigned a finishing time according to the running total
         finishing_time = finishing_time + 1
         G.set_finishing_time(node,finishing_time)
-    
-def DFS_Loop(G):
-    """
-    Loops through nodes in descending order, calling DFS on any that have not been explored yet.\
-    
-    Args:
-        G: The directed graph to be searched.
-    """
-    global finishing_time
-    global DFS_call_node
-    
-    finishing_time = 0
-    DFS_call_node = None
-    
-    #Loop through each node in descending order
-    for node in range(G.n, 0, -1):
-        #If the node hasn't been explored yet, call DFS on it
-        if not G.explored[node]:
-            #Keep track of which node DFS was called from, so that the leader 
-            #dictionary can use this information
-            DFS_call_node = node
-            DFS(G, node)
-           
-            
-#Allows toggling of simple example array from lectures for easy debugging
-test_case = False
 
-if test_case:
-    #Reversed graph given as an example in the lectures
-    adj_list_rev = [[1,7], [2,5], [3,9], [4,1], [5,8], [6,3], [6,8], [7,4], [7,9], [8,2], [9,6]]
-    
-    #Reverse the graph
-    adj_list = []
-    for i in adj_list_rev:
-        adj_list.append(i[::-1])
-else:
-    #Read in the adjacency list from the provided text file
+
+if __name__ == '__main__':
     file = open('SCC.txt')
     adj_list = []
     for line in file:
         adj_list.append([int(x) for x in line.split()])
     
-    #Reverse the graph, first step in Kosaraju's two-pass algorithm
-    adj_list_rev = []
-    for i in adj_list:
-        adj_list_rev.append(i[::-1])
+    SCC_sizes = kosaraju(adj_list)
 
-#Create a Digraph object for the reversed graph
-G_rev = Digraph(adj_list_rev)
-#Run DFS_Loop on the reversed graph to obtain finishing times (second step of
-#Kosaraju's two-pass algorithm)
-DFS_Loop(G_rev)
+    sorted_vals = sorted(SCC_sizes, reverse=True)
 
-#Relabel the nodes of the original graph G so that their number reflects their
-#finishing time from the DFS_Loop call on G_rev
-for i, edge in enumerate(adj_list):
-    for j, node in enumerate(edge):
-        adj_list[i][j] = G_rev.finishing_time[node]
-
-#Create a Digraph object out of the relabeled graph
-G = Digraph(adj_list)
-#Run DFS_Loop on the relabeled graph to obtain leaders (third step in Kosaraju's
-#two-step algorithm)
-DFS_Loop(G)
-    
-#Create a list containing the leaders of each node in G
-leader = []
-for value in G.leader.values():
-    leader.append(value)
-    
-#Counts how many times each leader appears (recall all nodes with the same
-#leader form an SCC)
-SCCs = collections.Counter(leader)
-vals = list(SCCs.values())
-
-#Sorts the number of leader occurrences in descending order so that we can identify
-#the five largest SCCs
-sorted_vals = sorted(vals, reverse=True)
-
-#The sizes of the five largest SCCs
-top_five = sorted_vals[0:5]
+    #The sizes of the five largest SCCs
+    top_five = sorted_vals[0:5]
