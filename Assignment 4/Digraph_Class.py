@@ -1,6 +1,6 @@
 from operator import itemgetter
 
-class Digraph:
+class Graph:
     """
     A class defining a directed graph object.
     """
@@ -13,15 +13,39 @@ class Digraph:
                 Adjacency list must be a list of lists, where each sublist represents one edge. 
                 Each sublist has two elements; the first element is the tail node, and the second element is the head node.
         """
-        
+
         #Obtains a set (i.e. no repeats) of all the nodes in the digraph
         all_nodes = []
-        all_nodes += self.get_head_nodes(adj_list)
         all_nodes += self.get_tail_nodes(adj_list)
+        all_nodes += self.get_head_nodes(adj_list)
         unique_nodes = set(all_nodes)
         
         #Number of nodes in the graph
         self.n = len(unique_nodes)
+
+    def get_tail_nodes(self, adj_list):
+        return list(map(itemgetter(0), adj_list))
+
+
+    def get_head_nodes(self, adj_list):
+        return list(map(itemgetter(1), adj_list))
+
+
+class Digraph(Graph):
+    """
+    A class defining a directed graph object.
+    """
+    def __init__(self, adj_list):
+        """
+        Constructor for the Digraph class.
+        
+        Args:
+            adj_list: The adjacency list representation of the directed graph.
+                Adjacency list must be a list of lists, where each sublist represents one edge. 
+                Each sublist has two elements; the first element is the tail node, and the second element is the head node.
+        """
+
+        super().__init__(adj_list)
         
         #Keys are tail nodes and values are lists of all the head nodes pointing to that tail node
         self.edges = dict((el+1,[]) for el in range(self.n))
@@ -38,14 +62,6 @@ class Digraph:
         
         #Keys are nodes and values are the finishing times of each node
         self.finishing_time = dict((el+1, None) for el in range(self.n))
-
-
-    def get_head_nodes(self, adj_list):
-        return list(map(itemgetter(0), adj_list))
-
-
-    def get_tail_nodes(self, adj_list):
-        return list(map(itemgetter(1), adj_list))
 
         
     def mark_explored(self, explored_node):
