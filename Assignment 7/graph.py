@@ -116,22 +116,12 @@ class Weighted_Graph(Graph):
 
     def create_edges(self, adj_list):
         # Keys are tail nodes and values are lists of all the head nodes associated with that tail node
-        edges = dict((el+1, []) for el in range(self.n))
+        edges = []
         for edge in adj_list:
             tail_node = int(edge[0])
             head_node = int(edge[1])
             edge_weight = int(edge[2])
 
-            weighted_edge = {(tail_node, head_node): edge_weight}
-
-            edges[tail_node].append(weighted_edge)
+            edges.append((tail_node, head_node, edge_weight))
 
         return edges
-
-"""         self.edge_weights = self.read_edge_weights(adj_list)
-
-
-
-    def read_edge_weights(self, adj_list):
-        return list(map(itemgetter(2), adj_list)) """
-
