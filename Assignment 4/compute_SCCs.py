@@ -1,6 +1,7 @@
 import collections
-from graph import Digraph
 from pathlib import Path
+from graph import Digraph
+
 
 
 def kosaraju(adj_list):

@@ -24,6 +24,10 @@ class Graph:
 
         self.n = self.compute_number_of_nodes(adj_list)
 
+        self.edges = self.create_edges(adj_list)
+        # Keys are nodes and values denote whether that node has been explored (True) or not (False)
+        self.explored = dict((el+1, False) for el in range(self.n))
+
     def read_tail_nodes(self, adj_list):
         return list(map(itemgetter(0), adj_list))
 
@@ -39,6 +43,25 @@ class Graph:
 
         # Number of nodes in the graph
         return len(unique_nodes)
+
+    def create_edges(self, adj_list):
+        # Keys are tail nodes and values are lists of all the head nodes associated with that tail node
+        edges = dict((el+1, []) for el in range(self.n))
+        for edge in adj_list:
+            tail_node = int(edge[0])
+            head_node = int(edge[1])
+            edges[tail_node].append(head_node)
+
+        return edges
+
+    def mark_explored(self, explored_node):
+        """
+        Uses the input node as the key and changes the corresponding value of the explored dictionary to True.
+
+        Args:
+            explored_node: The number of the node to be marked as explored
+        """
+        self.explored[explored_node] = True
 
 
 class Digraph(Graph):
@@ -57,30 +80,11 @@ class Digraph(Graph):
 
         super().__init__(adj_list)
 
-        # Keys are tail nodes and values are lists of all the head nodes pointing to that tail node
-        self.edges = dict((el+1, []) for el in range(self.n))
-        for edge in adj_list:
-            tail_node = int(edge[0])
-            head_node = int(edge[1])
-            self.edges[tail_node].append(head_node)
-
-        # Keys are nodes and values denote whether that node has been explored (True) or not (False)
-        self.explored = dict((el+1, False) for el in range(self.n))
-
         # Keys are nodes and values denote which node DFS was called on to explore that node
         self.leader = dict((el+1, None) for el in range(self.n))
 
         # Keys are nodes and values are the finishing times of each node
         self.finishing_time = dict((el+1, None) for el in range(self.n))
-
-    def mark_explored(self, explored_node):
-        """
-        Uses the input node as the key and changes the corresponding value of the explored dictionary to True.
-
-        Args:
-            explored_node: The number of the node to be marked as explored
-        """
-        self.explored[explored_node] = True
 
     def set_finishing_time(self, explored_node, finishing_time):
         """
@@ -108,10 +112,16 @@ class Digraph(Graph):
 class Weighted_Graph(Graph):
 
     def __init__(self, adj_list):
-
         super().__init__(adj_list)
-        edges  = [(self.tail_nodes[i], self.head_nodes[i]) for i in len(self.tail_nodes)]
-        edge_weights = self.read_edge_weights(adj_list)
 
-    def read_edge_weights(self, adj_list):
-        return list(map(itemgetter(2), adj_list))
+    def create_edges(self, adj_list):
+        # Keys are tail nodes and values are lists of all the head nodes associated with that tail node
+        edges = []
+        for edge in adj_list:
+            tail_node = int(edge[0])
+            head_node = int(edge[1])
+            edge_weight = int(edge[2])
+
+            edges.append((tail_node, head_node, edge_weight))
+
+        return edges
