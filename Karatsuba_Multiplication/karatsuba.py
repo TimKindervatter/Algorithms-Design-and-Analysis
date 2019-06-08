@@ -2,55 +2,21 @@ import math
 
 
 def karatsuba(x, y):
-    if (x < 0) ^ (y < 0):
-        negative = True
-    else:
-        negative = False
+    if (x < 10) or (y < 10):
+        return x*y
 
-    x = str(abs(x))
-    y = str(abs(y))
+    n = max(len(str(x)), len(str(y)))
+    m = math.ceil(n/2)
 
-    if len(x) < len(y):
-        x = '0'*(len(y) - len(x)) + x
-    if len(y) < len(x):
-        y = '0'*(len(x) - len(y)) + y
+    a, b = split(x, m)
+    c, d = split(y, m)
 
-    if len(x) == 1 or len(y) == 1:
-        return int(x)*int(y)
+    first_term = karatsuba(a, c)
+    third_term = karatsuba(b, d)
+    second_term = karatsuba(a+b, c+d) - first_term - third_term
 
-    n = min(len(x), len(y))
-    m = math.ceil(n/2) if (n != 3) else 2
-
-    a = first_half(x)
-    b = second_half(x)
-    c = first_half(y)
-    d = second_half(y)
-
-    product1 = karatsuba(a, c)
-    product3 = karatsuba(a+b, c+d)
-    product2 = karatsuba(b, d)
-    
-    first_term = product1
-    second_term = product3 - product2 - product1
-    third_term = product2
-
-    result = (10**(2*m))*first_term + (10**m)*second_term + third_term
-
-    if negative:
-        return -result
-    else:
-        return result
+    return (10**(2*m))*first_term + (10**m)*second_term + third_term
 
 
-def first_half(number):
-    n = len(str(number))
-    return int(str(number)[:n//2])
-
-
-def second_half(number):
-    n = len(str(number))
-    return int(str(number)[n//2:])
-
-
-if __name__ == '__main__':
-    print(karatsuba(11708, 90505))
+def split(number, m):
+    return number//(10**m), number % (10**m)
