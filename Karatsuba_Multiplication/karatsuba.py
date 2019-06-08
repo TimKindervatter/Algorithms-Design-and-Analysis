@@ -2,8 +2,13 @@ import math
 
 
 def karatsuba(x, y):
-    x = str(x)
-    y = str(y)
+    if (x < 0) ^ (y < 0):
+        negative = True
+    else:
+        negative = False
+
+    x = str(abs(x))
+    y = str(abs(y))
 
     if len(x) < len(y):
         x = '0'*(len(y) - len(x)) + x
@@ -29,7 +34,12 @@ def karatsuba(x, y):
     second_term = product3 - product2 - product1
     third_term = product2
 
-    return (10**(2*m))*first_term + (10**m)*second_term + third_term
+    result = (10**(2*m))*first_term + (10**m)*second_term + third_term
+
+    if negative:
+        return -result
+    else:
+        return result
 
 
 def first_half(number):
