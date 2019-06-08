@@ -6,15 +6,15 @@ def karatsuba(x, y):
     y = str(y)
 
     if len(x) < len(y):
-        x = '0' + x
+        x = '0'*(len(y) - len(x)) + x
     if len(y) < len(x):
-        y = '0' + y
+        y = '0'*(len(x) - len(y)) + y
 
     if len(x) == 1 or len(y) == 1:
         return int(x)*int(y)
 
     n = min(len(x), len(y))
-    m = n//2 if (n != 3) else 2
+    m = math.ceil(n/2) if (n != 3) else 2
 
     a = first_half(x)
     b = second_half(x)
@@ -43,4 +43,4 @@ def second_half(number):
 
 
 if __name__ == '__main__':
-    print(karatsuba(5678, 1234))
+    print(karatsuba(11708, 90505))
