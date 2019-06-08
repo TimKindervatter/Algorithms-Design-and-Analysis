@@ -1,11 +1,20 @@
+import math
+
+
 def karatsuba(x, y):
-    length_x = len(str(x))
-    length_y = len(str(y))
+    x = str(x)
+    y = str(y)
 
-    if length_x == 1 or length_y == 1:
-        return x*y
+    if len(x) < len(y):
+        x = '0' + x
+    if len(y) < len(x):
+        y = '0' + y
 
-    n = max(length_x, length_y)
+    if len(x) == 1 or len(y) == 1:
+        return int(x)*int(y)
+
+    n = min(len(x), len(y))
+    m = n//2 if (n != 3) else 2
 
     a = first_half(x)
     b = second_half(x)
@@ -13,14 +22,14 @@ def karatsuba(x, y):
     d = second_half(y)
 
     product1 = karatsuba(a, c)
-    product2 = karatsuba(b, d)
     product3 = karatsuba(a+b, c+d)
+    product2 = karatsuba(b, d)
     
     first_term = product1
     second_term = product3 - product2 - product1
     third_term = product2
 
-    return (10**n)*first_term + (10**(n//2))*second_term + third_term
+    return (10**(2*m))*first_term + (10**m)*second_term + third_term
 
 
 def first_half(number):
@@ -34,4 +43,4 @@ def second_half(number):
 
 
 if __name__ == '__main__':
-    karatsuba(1234, 5678)
+    print(karatsuba(5678, 1234))
