@@ -24,18 +24,3 @@ class UnionFind:
             root = self.parent[root]
 
         return root
-
-    # def get_parent(self, x):
-    #     return self.parents[x]
-
-    # def set_parent(self, x, new_parent):
-    #     self.parents[x] = new_parent
-    #     return self.parents
-
-if __name__ == '__main__':
-    parents, ranks, p, q, expected = ({1:1, 2:1, 3:1, 4:4, 5:4, 6:4}, {1:1, 2:0, 3:0, 4:1, 5:0, 6:0}, 1, 4, {1:4, 2:1, 3:1, 4:4, 5:4, 6:4})
-
-    clusters = UnionFind(parents, ranks)
-    new_parents = clusters.union(p, q)
-
-    assert(new_parents == expected)
