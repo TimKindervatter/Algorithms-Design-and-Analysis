@@ -8,7 +8,7 @@ adj_list = [
     [4, 5, 10.05], [4, 6, 12.05],
     [5, 6, 2]]
 
-t1 = (adj_list, len(adj_list), 3, 10)
+t1 = (adj_list, 6, 3, 6)
 
 test_cases = [t1]
 
