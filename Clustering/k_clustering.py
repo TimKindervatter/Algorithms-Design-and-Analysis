@@ -1,4 +1,5 @@
 import heapq
+from pathlib import Path
 from UnionFind import UnionFind
 
 
@@ -32,11 +33,13 @@ def priority_tuple(edge):
 
 
 if __name__ == '__main__':
-    adj_list = [
-    [1, 2, 10], [1, 3, 12], [1, 4, 6], [1, 5, 11.2], [1, 6, 13],
-    [2, 3, 2], [2, 4, 11.7], [2, 5, 5], [2, 6, 5.4],
-    [3, 4, 13.4], [3, 5, 5.4], [3, 6, 5],
-    [4, 5, 10.05], [4, 6, 12.05],
-    [5, 6, 2]]
+    path = Path(__file__ + '../..').resolve()
+    adj_list = []
+    with open(Path(path, 'clustering1.txt')) as file:
+        for line in file:
+            adj_list.append([int(x) for x in line.split()])
 
-    clusters = cluster(adj_list, 6, 3)
+    n = adj_list.pop(0)[0]
+    min_separation = cluster(adj_list, n, 4)
+
+    print(min_separation)
