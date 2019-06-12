@@ -9,7 +9,7 @@ class UnionFind:
 
         if self.rank[s1] == self.rank[s2]:
             self.parent[s2] = s1
-            self.rank[s2] += 1
+            self.rank[s1] += 1
         elif self.rank[s1] > self.rank[s2]:
             self.parent[s2] = s1
         elif self.rank[s1] < self.rank[s2]:
