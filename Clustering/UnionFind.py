@@ -21,6 +21,7 @@ class UnionFind:
         root = self.parent[x]
 
         while self.parent[root] != root:
+            self.parent[root] = self.parent[self.parent[root]]  # Path compression
             root = self.parent[root]
 
         return root
