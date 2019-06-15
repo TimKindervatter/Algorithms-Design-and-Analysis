@@ -8,7 +8,6 @@ def cluster(adj_list, n, k):
 
     # Union-find data structure to represent clusters
     parents = [i for i in range(1, n+1)]
-    # ranks = {i: 0 for i in range(1, n+1)}
     clusters = UnionFind(parents)
 
     # Heap for quick access of minimum separation
