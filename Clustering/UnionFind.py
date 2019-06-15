@@ -14,6 +14,9 @@ class UnionFind:
         Combines the disjoint subset that contains p with the disjoint subset that contains q.
         Unions are performed by rank. In case of ties, the root of p's subset remains the root of the unioned subset.
         """
+        if p == q:
+            return
+
         s1 = self.find(p)
         s2 = self.find(q)
 
