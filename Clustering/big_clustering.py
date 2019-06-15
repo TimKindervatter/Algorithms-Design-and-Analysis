@@ -1,18 +1,23 @@
 import itertools
+from pathlib import Path
+from test_big_clustering import read_input
 from UnionFind import UnionFind
 
 
-def big_cluster(bitstrings, n, k):
+def big_cluster(bitstrings, n, k=2):
     all_masks = generate_masks(n, k)
     values_present = {bitstring: True for bitstring in bitstrings}
 
-    for bitstring in bitstrings:
-        clusters = UnionFind(bitstrings)
+    node_labels = [i for i in range(1, len(bitstrings) + 1)]
+    nodes = {bitstring: i+1 for i, bitstring in enumerate(bitstrings)}
 
+    clusters = UnionFind(node_labels)
+
+    for bitstring in bitstrings:
         for mask in all_masks:
             masked_bitstring = bitstring_xor(bitstring, mask)
-            if values_present[masked_bitstring]:
-                clusters.union(bitstring, masked_bitstring)
+            if values_present.get(masked_bitstring):
+                clusters.union(nodes[bitstring], nodes[masked_bitstring])
 
     return clusters
 
@@ -56,11 +61,16 @@ def generate_hamming_masks(n, k):
 
 
 if __name__ == "__main__":
-    bitstrings = ["000", "001", "010", "011", "100", "101", "110", "111"]
-    n = 3
-    k = 2
+    path = Path(__file__ + "../..").resolve()
+    bitstrings = []
+    with open(Path(path, 'clustering_big.txt')) as file:
+        first_line = file.readline().split()
+        num_nodes = int(first_line[0])
+        n = int(first_line[1])
+        for line in file.readlines():
+            line = line.strip().replace(" ", "")
+            bitstrings.append(line)
 
-    clusters = big_cluster(bitstrings, n, k)
+    clusters = big_cluster(bitstrings, n)
 
-    print(clusters)
     print(len(clusters))
