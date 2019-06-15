@@ -1,19 +1,7 @@
 import pytest
 from pathlib import Path
-from big_clustering import big_cluster
+from big_clustering import big_cluster, read_input
 from UnionFind import UnionFind
-
-def read_input(filename):
-    bitstrings = []
-    with open(filename) as file:
-        first_line = file.readline().split()
-        num_nodes = int(first_line[0])
-        n = int(first_line[1])
-        for line in file.readlines():
-            line = line.strip().replace(" ", "")
-            bitstrings.append(line)
-
-    return bitstrings, n
 
 
 def read_output(filename):
@@ -31,13 +19,17 @@ output_files = [file for file in files if "output" in file.name]
 test_cases = []
 
 for i, _ in enumerate(input_files):
-    bitstrings, n = read_input(input_files[0])
-    expected = read_output(output_files[0])
+    bitstrings, n = read_input(input_files[i])
+    expected = read_output(output_files[i])
 
     test_cases.append((bitstrings, n, expected))
 
 @pytest.mark.parametrize('bitstrings, n, expected', test_cases)
-def test_bit_clustering(bitstrings, n, expected):
+def test_big_clustering(bitstrings, n, expected):
     clusters = big_cluster(bitstrings, n)
 
     assert(len(clusters) == expected)
+
+
+if __name__ == '__main__':
+    test_big_clustering(*test_cases[5])

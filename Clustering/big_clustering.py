@@ -1,6 +1,5 @@
 import itertools
 from pathlib import Path
-from test_big_clustering import read_input
 from UnionFind import UnionFind
 
 
@@ -60,16 +59,24 @@ def generate_hamming_masks(n, k):
     return masks
 
 
-if __name__ == "__main__":
-    path = Path(__file__ + "../..").resolve()
-    bitstrings = []
-    with open(Path(path, 'clustering_big.txt')) as file:
+def read_input(filename):
+    bitstrings = set()
+    with open(filename) as file:
         first_line = file.readline().split()
         num_nodes = int(first_line[0])
         n = int(first_line[1])
         for line in file.readlines():
             line = line.strip().replace(" ", "")
-            bitstrings.append(line)
+            bitstrings.add(line)
+
+    return bitstrings, n
+
+
+if __name__ == "__main__":
+    path = Path(__file__ + "../..").resolve()
+    filename = Path(path, 'clustering_big.txt')
+
+    bitstrings, n = read_input(filename)
 
     clusters = big_cluster(bitstrings, n)
 
