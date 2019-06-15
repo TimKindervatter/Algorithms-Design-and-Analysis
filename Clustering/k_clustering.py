@@ -7,9 +7,9 @@ def cluster(adj_list, n, k):
     """Creates k clusters of the n points listed in the provided adjacency list."""
 
     # Union-find data structure to represent clusters
-    parents = {i: i for i in range(1, n+1)}
-    ranks = {i: 0 for i in range(1, n+1)}
-    clusters = UnionFind(parents, ranks)
+    parents = [i for i in range(1, n+1)]
+    # ranks = {i: 0 for i in range(1, n+1)}
+    clusters = UnionFind(parents)
 
     # Heap for quick access of minimum separation
     priority_tuples = [priority_tuple(edge) for edge in adj_list]
