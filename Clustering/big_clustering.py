@@ -3,27 +3,25 @@ from pathlib import Path
 from UnionFind import UnionFind
 
 
-def big_cluster(bitstrings, n, k=2):
+def big_cluster(input_values, n, k=2):
     all_masks = generate_masks(n, k)
-    values_present = {bitstring: True for bitstring in bitstrings}
+    values_present = {bitstring: True for bitstring in input_values}
 
     # node_labels = [i for i in range(1, len(bitstrings) + 1)]
     # nodes = {bitstring: i+1 for i, bitstring in enumerate(bitstrings)}
 
-    clusters = UnionFind(bitstrings)
+    clusters = UnionFind(input_values)
 
-    masked_bitstrings = set()
+    all_possible_neighbors = {}
 
-    for bitstring in bitstrings:
+    for bitstring in input_values:
         for mask in all_masks:
-            # masked_bitstrings.add(bitstring ^ mask)
-            masked_bitstrings.add(bitstring_xor(bitstring, mask))
+            # all_possible_neighbors.add(bitstring ^ mask)
+            all_possible_neighbors[bitstring_xor(bitstring, mask)] = bitstring
 
-    for masked_bitstring in masked_bitstrings:
-        if values_present.get(masked_bitstring):
-            # TODO: Fix this line. Bitstring doesn't change now that I've made two loops. 
-            # ?What am I unioning masked bitstring with?
-            clusters.union(bitstring, masked_bitstring)
+    for neighbor in all_possible_neighbors:
+        if values_present.get(neighbor):
+            clusters.union(all_possible_neighbors[neighbor], neighbor)
 
     return clusters
 

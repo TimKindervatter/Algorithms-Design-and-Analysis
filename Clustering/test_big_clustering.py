@@ -18,7 +18,8 @@ output_files = [file for file in files if "output" in file.name]
 
 test_cases = []
 
-for i,_ in enumerate(input_files):
+# for i,_ in enumerate(input_files):
+for i in range(25):
     bitstrings, n = read_input(input_files[i])
     expected = read_output(output_files[i])
 
@@ -32,4 +33,4 @@ def test_big_clustering(bitstrings, n, expected):
 
 
 if __name__ == '__main__':
-    test_big_clustering(*test_cases[54])
+    test_big_clustering(*test_cases[82])
