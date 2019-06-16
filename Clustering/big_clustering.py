@@ -7,16 +7,23 @@ def big_cluster(bitstrings, n, k=2):
     all_masks = generate_masks(n, k)
     values_present = {bitstring: True for bitstring in bitstrings}
 
-    node_labels = [i for i in range(1, len(bitstrings) + 1)]
-    nodes = {bitstring: i+1 for i, bitstring in enumerate(bitstrings)}
+    # node_labels = [i for i in range(1, len(bitstrings) + 1)]
+    # nodes = {bitstring: i+1 for i, bitstring in enumerate(bitstrings)}
 
-    clusters = UnionFind(node_labels)
+    clusters = UnionFind(bitstrings)
+
+    masked_bitstrings = set()
 
     for bitstring in bitstrings:
         for mask in all_masks:
-            masked_bitstring = bitstring_xor(bitstring, mask)
-            if values_present.get(masked_bitstring):
-                clusters.union(nodes[bitstring], nodes[masked_bitstring])
+            # masked_bitstrings.add(bitstring ^ mask)
+            masked_bitstrings.add(bitstring_xor(bitstring, mask))
+
+    for masked_bitstring in masked_bitstrings:
+        if values_present.get(masked_bitstring):
+            # TODO: Fix this line. Bitstring doesn't change now that I've made two loops. 
+            # ?What am I unioning masked bitstring with?
+            clusters.union(bitstring, masked_bitstring)
 
     return clusters
 
@@ -35,7 +42,7 @@ def generate_masks(n, k):
     """
 
     all_masks = []
-    for i in range(k+1):
+    for i in range(1, k+1):
         all_masks.extend(generate_hamming_masks(n, i))
         
     return all_masks
@@ -56,6 +63,8 @@ def generate_hamming_masks(n, k):
             bitstring[bit] = '1'
         masks.append(''.join(bitstring))
 
+    # masks = [int(mask, 2) for mask in masks]
+
     return masks
 
 
@@ -67,6 +76,7 @@ def read_input(filename):
         n = int(first_line[1])
         for line in file.readlines():
             line = line.strip().replace(" ", "")
+            # line = int(line, 2)
             bitstrings.add(line)
 
     return bitstrings, n
