@@ -3,12 +3,14 @@ from pathlib import Path
 from UnionFind import UnionFind
 
 
+#! Only works on some test cases. In general, larger datasets fail while smaller ones pass. Wasn't able to track down the problem.
+#* Strikethrough lines are used to use ints instead of bitstrings. This is potentially easier to debug in some cases.
 def big_cluster(input_values, n, k=2):
     all_masks = generate_masks(n, k)
     values_present = {bitstring: True for bitstring in input_values}
 
-    # node_labels = [i for i in range(1, len(bitstrings) + 1)]
-    # nodes = {bitstring: i+1 for i, bitstring in enumerate(bitstrings)}
+    #// node_labels = [i for i in range(1, len(bitstrings) + 1)]
+    #// nodes = {bitstring: i+1 for i, bitstring in enumerate(bitstrings)}
 
     clusters = UnionFind(input_values)
 
@@ -16,7 +18,7 @@ def big_cluster(input_values, n, k=2):
 
     for bitstring in input_values:
         for mask in all_masks:
-            # all_possible_neighbors.add(bitstring ^ mask)
+            #// all_possible_neighbors.add(bitstring ^ mask)
             all_possible_neighbors[bitstring_xor(bitstring, mask)] = bitstring
 
     for neighbor in all_possible_neighbors:
@@ -61,7 +63,7 @@ def generate_hamming_masks(n, k):
             bitstring[bit] = '1'
         masks.append(''.join(bitstring))
 
-    # masks = [int(mask, 2) for mask in masks]
+    #// masks = [int(mask, 2) for mask in masks]
 
     return masks
 
@@ -74,7 +76,7 @@ def read_input(filename):
         n = int(first_line[1])
         for line in file.readlines():
             line = line.strip().replace(" ", "")
-            # line = int(line, 2)
+            #// line = int(line, 2)
             bitstrings.add(line)
 
     return bitstrings, n

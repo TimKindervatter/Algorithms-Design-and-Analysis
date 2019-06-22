@@ -18,6 +18,7 @@ output_files = [file for file in files if "output" in file.name]
 
 test_cases = []
 
+# * Commented line is for all tests, but the latter ones run very slowly. First 25 run quickly.
 # for i,_ in enumerate(input_files):
 for i in range(25):
     bitstrings, n = read_input(input_files[i])
