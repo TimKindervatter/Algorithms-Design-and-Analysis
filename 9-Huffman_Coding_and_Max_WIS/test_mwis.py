@@ -41,14 +41,3 @@ def test_mwis(weights, expected):
     binary_string = mwis.make_binary_string(S)
 
     assert(binary_string == expected)
-
-
-if __name__ == '__main__':
-    weights = read_input(input_files[0])
-    expected = read_output(output_files[0])
-
-    A = mwis.mwis(weights)
-    S = mwis.reconstruct(A, weights)
-    binary_string = mwis.make_binary_string(S)
-
-    print(binary_string)

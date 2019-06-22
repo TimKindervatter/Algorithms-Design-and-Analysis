@@ -3,15 +3,6 @@ from pathlib import Path
 from BinaryTree import BinaryTree
 
 
-# class Huffman_Node:
-#     def __init__(self, left=None, right=None):
-#         self.left = left
-#         self.right = right
-
-#     def __lt__(self, other):
-#         return False
-
-
 def huffman(symbol_weights):
     symbols = [(symbol_weight, BinaryTree(root=symbol_weight)) for symbol_weight in symbol_weights]
     for _ in range(len(symbols) - 1):

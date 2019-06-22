@@ -26,7 +26,3 @@ def test_huffman(symbol_weights, expected):
     min_depth = symbol_tree.min_depth
 
     assert(expected == [max_depth, min_depth])
-
-
-if __name__ == '__main__':
-    print(test_cases)
