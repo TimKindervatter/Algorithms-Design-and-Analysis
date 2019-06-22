@@ -11,14 +11,11 @@ files = [x for x in path if x.is_file()]
 input_files = [file for file in files if 'input' in file.name]
 output_files = [file for file in files if 'output' in file.name]
 
-# t3 = ([74, 46, 25, 48, 13, 37, 97, 77, 45, 96], [5,2])
-
 test_cases = []
 for i, _ in enumerate(input_files):
     test_cases.append((read_input(input_files[i]), read_output(output_files[i])))
 
 test_cases = [t1, t2] + test_cases
-
 
 
 @pytest.mark.parametrize('symbol_weights, expected', test_cases)
