@@ -1,4 +1,5 @@
 import heapq
+from pathlib import Path
 from BinaryTree import BinaryTree
 
 
@@ -23,7 +24,8 @@ def huffman(symbol_weights):
 
         heapq.heappush(symbols, merged_symbol)
 
-    return symbols
+    symbol_tree = symbols[0][1]
+    return symbol_tree
 
 
 def merge_symbols(lightest_symbol, second_lightest_symbol):
@@ -33,8 +35,33 @@ def merge_symbols(lightest_symbol, second_lightest_symbol):
     return (merged_weight, merged_node)
 
 
+def read_input(filename):
+    symbol_weights = []
+    with open(filename) as f:
+        number_of_symbols = int(f.readline())
+        for line in f.readlines():
+            symbol_weights.append(int(line))
+
+    return symbol_weights
+
+
+def read_output(filename):
+    depths = []
+    with open(filename) as f:
+        for line in f.readlines():
+            depths.append(int(line))
+    
+    return depths
+
+
 if __name__ == '__main__':
-    # symbol_weights = [3, 2, 6, 8, 2, 6]
-    # symbol_weights = [60, 25, 10, 5]
-    symbol_weights = [74, 46, 25, 48, 13, 37, 97, 77, 45, 96]
-    print(huffman(symbol_weights))
+    path = Path(__file__ + '../..').resolve()
+    filename = Path(path, 'huffman.txt')
+    symbol_weights = read_input(filename)
+
+    symbol_tree = huffman(symbol_weights)
+
+    max_depth = symbol_tree.max_depth
+    min_depth = symbol_tree.min_depth
+
+    print([max_depth, min_depth])
