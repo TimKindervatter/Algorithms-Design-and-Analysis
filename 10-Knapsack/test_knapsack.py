@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from knapsack import knapsack, read_input, read_output
+from knapsack import knapsack, big_knapsack, read_input, read_output
 
 path = Path(r"C:\Python\Stanford Algorithms Problem Sets\Test_Cases\stanford-algs\testCases\course3\assignment4Knapsack").glob('**/*')
 files = [x for x in path if x.is_file()]
@@ -18,7 +18,7 @@ for i, _ in enumerate(input_files):
 
 @pytest.mark.parametrize('knapsack_capacity, items, expected', test_cases)
 def test_knapsack(knapsack_capacity, items, expected):
-    actual = knapsack(knapsack_capacity, items)
+    actual = big_knapsack(knapsack_capacity, items)
 
     assert(expected == actual)
 
