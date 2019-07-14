@@ -9,13 +9,13 @@ def floyd_warshall(adj_list, n):
 
     for i in range(1, n+1):
         for j in range(1, n+1):
-            # if i == j:
-            #     A[i, j, 0] = 0
-            # else:
+            if i == j:
+                A[i, j, 0] = 0
+
+    for i in range(1, n+1):
+        for j in range(1, n+1):
             if edge_present(i, j):
                 A[i, j, 0] = adj_list[i, j]
-            else:
-                A[i, j, 0] = np.inf
 
     for k in range(1, n+1):
         print(k)
@@ -72,17 +72,17 @@ def read_output(filename):
 
 
 if __name__ == '__main__':
-    adj_list_1, n_1 = read_input('g1.txt')
-    adj_list_2, n_2 = read_input('g2.txt')
+    # adj_list_1, n_1 = read_input('g1.txt')
+    # adj_list_2, n_2 = read_input('g2.txt')
     adj_list_3, n_3 = read_input('g3.txt')
 
-    print("Starting graph 1")
-    A_1 = floyd_warshall(adj_list_1, n_1)
-    print("Starting graph 2")
-    A_2 = floyd_warshall(adj_list_2, n_2)
+    # print("Starting graph 1")
+    # A_1 = floyd_warshall(adj_list_1, n_1)
+    # print("Starting graph 2")
+    # A_2 = floyd_warshall(adj_list_2, n_2)
     print("Starting graph 3")
     A_3 = floyd_warshall(adj_list_3, n_3)
     
-    print(A_1)
-    print(A_2)
+    # print(A_1)
+    # print(A_2)
     print(A_3)
