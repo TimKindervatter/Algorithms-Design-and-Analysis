@@ -17,7 +17,7 @@ def johnson(adj_list, n, source_node):
         return min(A)
 
 
-if __name__ == '__main__'
+if __name__ == '__main__':
     source_node = 0
     adj_list_1, n_1 = read_input('g1.txt')
     adj_list_2, n_2 = read_input('g2.txt')
