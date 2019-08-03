@@ -4,6 +4,10 @@ from pathlib import Path
 
 
 def papadimitriou(clauses):
+    # If there are no clauses remaining after reduction, then the instance is satisfiable
+    if len(clauses) == 0:
+        return True
+
     def evaluate_condition(variable):
         if variable > 0:
             return assignment[variable]
@@ -16,8 +20,10 @@ def papadimitriou(clauses):
             variables.add(abs(variable))
 
     n = len(variables)
+
     assignment = {}
-    for _ in range(math.floor(math.log2(n))):
+    outer_interations = math.ceil(math.log2(n)) if n > 1 else 1
+    for _ in range(outer_interations):
         for variable in variables:
             assignment[variable] = random.choice([True, False])
 
@@ -85,12 +91,20 @@ def reduce_clauses(clauses):
 
 def read_input(filename):
     with open(filename) as f:
-        n = int(f.readline())
+        f.readline()
         clauses = []
         for line in f.readlines():
             clauses.append([int(x) for x in line.split()])
 
-    return n, clauses
+    return clauses
+
+
+def read_output(filename):
+    with open(filename) as f:
+        line = int(f.readline().strip())
+        expected = bool(line)
+
+    return expected
 
 
 if __name__ == '__main__':
@@ -98,7 +112,7 @@ if __name__ == '__main__':
     prefix = '2sat'
     filenames = [prefix + str(i) + '.txt' for i in range(1, 7)]
     for filename in filenames:
-        n, clauses = read_input(Path(path, filename))
+        clauses = read_input(Path(path, filename))
 
         reduced_clauses = reduce_clauses(clauses)
         result = papadimitriou(reduced_clauses)
