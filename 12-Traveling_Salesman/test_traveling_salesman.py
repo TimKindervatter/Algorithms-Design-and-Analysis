@@ -23,16 +23,3 @@ def test_knapsack(vertices, n, expected):
     actual = math.floor(traveling_salesman(vertices, n))
 
     assert(expected == actual)
-
-
-if __name__ == '__main__':
-    # vertices, n = read_input(input_files[92])
-    # expected = read_output(output_files[92])
-
-    path = Path(__file__ + "../..").resolve()
-    vertices, n = read_input(Path(path, "test1.txt"))
-    expected = 10
-    actual = math.floor(traveling_salesman(vertices, n))
-
-    print("Expected: " + str(expected))
-    print("Actual: " + str(actual))
